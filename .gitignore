@@ -1,0 +1,33 @@
+# --- Артефакты сборки CMake ---
+# Это самые важные пункты. CMake генерирует эти папки/файлы заново при конфигурации,
+# и их наличие в репозитории будет вызывать конфликты у других разработчиков[citation:3][citation:8].
+build/
+cmake-build-*/
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+compile_commands.json
+
+# --- Файлы, специфичные для VS Code ---
+# Игнорируем пользовательские настройки и кэш VS Code, чтобы не засорять репозиторий[citation:2][citation:7].
+.vscode/
+.cache/
+
+# --- Пользовательские пресеты CMake ---
+# Этот файл содержит локальные настройки компилятора и пути, и не должен быть общим[citation:2][citation:9].
+CMakeUserPresets.json
+
+# --- Временные файлы IDE и системы ---
+# Игнорируем файлы, которые создают редакторы и ОС[citation:2][citation:8][citation:10].
+*.exe
+*.out
+*.app
+*.o
+*.obj
+*.pdb
+*.dSYM/
+*.log
+*.tmp
+*~
+.DS_Store

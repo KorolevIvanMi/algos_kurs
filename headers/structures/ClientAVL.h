@@ -6,10 +6,10 @@ struct AVLNode
 {
     int passport_number;
     // Client client;
+    int height;
 
-
-    AVLNode* parent;
-    AVLNode* older_child;
-    AVLNode* youngest_child;
+    AVLNode* Prev;
+    AVLNode* Left;
+    AVLNode* Right;
 
 };

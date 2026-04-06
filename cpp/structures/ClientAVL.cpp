@@ -1,4 +1,5 @@
 #include <string>
+#include <iostream>
 #include "ClientAVL.h"
 
 void AVLNode::refreshHeight(){
@@ -170,4 +171,77 @@ void AVLNode::BalanceTree(AVLNode*& root, AVLNode* newNode) {
         
         current = current->Prev;
     }
+}
+
+void AVLNode::AddClient(AVLNode*& root, Client client){
+    long long client_passport_number = client.get_passport_number_int();
+    AVLNode* mainTree = root;
+    if(!root){
+        root = new AVLNode;
+        root->client = client;
+        root->passport_number = client_passport_number;
+        root->height = 0;
+        root->Right = nullptr;
+        root->Left = nullptr;
+        root->Prev = nullptr;
+        mainTree = root;
+    }
+    else{
+        while(true){
+            if(client_passport_number < mainTree->passport_number){
+                if(mainTree->Left){
+                    mainTree = mainTree->Left;
+                }
+                else{
+                    mainTree->Left = new AVLNode;
+                    mainTree->Left->client = client;
+                    mainTree->Left->passport_number = client_passport_number;
+                    mainTree->Left->height = 0;
+                    mainTree->Left->Left = nullptr;
+                    mainTree->Left->Right = nullptr;
+                    mainTree->Left->Prev = mainTree;
+                    mainTree->Left->refreshHeight();
+                    break;
+                }
+            }
+            else{
+                if(mainTree->Right){
+                    mainTree = mainTree->Right;
+                }
+                else{
+                    mainTree->Right = new AVLNode;
+                    mainTree->Right->client = client;
+                    mainTree->Right->height = 0;
+                    mainTree->Right->passport_number = client_passport_number;
+                    mainTree->Right->Left = nullptr;
+                    mainTree->Right->Right = nullptr;
+                    mainTree->Right->Prev = mainTree;
+                    mainTree->Right->refreshHeight();
+                    break;
+                }
+            }
+        }
+        root->BalanceTree(root, mainTree);
+    }
+}
+
+
+AVLNode* AVLNode::findClientByPassport(AVLNode*& root, long long client_passport){
+    AVLNode* current = root;
+    while(true){
+        if(current->passport_number == client_passport){
+            std::cout << "Найдет человек, инфу выведу потом ";
+            return current;
+        }
+        if (current->passport_number > client_passport && current->Left){
+            current = current->Left;
+        }
+        else if (current->passport_number < client_passport && current->Right){
+            current = current->Right;
+        }
+        else{
+            return nullptr;
+        }
+    }
+    return nullptr;
 }

@@ -26,11 +26,11 @@ struct AVLNode
     void BalanceTree(AVLNode*&,AVLNode*);
 
 
-    void AddClient(Client);
-    void deleteClient(long long);
-    void showAllClients();
-    void deleteAllClients();
-    void findClientByPassport(long long);
-    void findClientByFio(std::string);
-    void findClientByAdress(std::string);
+    void AddClient(AVLNode*&, Client); //+
+    void deleteClient(AVLNode*&, long long);
+    void showAllClients(AVLNode*&);
+    void deleteAllClients(AVLNode*&);
+    AVLNode* findClientByPassport(AVLNode*&, long long);
+    void findClientByFio(AVLNode*&, std::string);
+    void findClientByAdress(AVLNode*&,std::string);
 };

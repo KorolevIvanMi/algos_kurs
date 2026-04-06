@@ -16,14 +16,14 @@ struct AVLNode
     AVLNode* Right;
 
 
-    void refreshHeight();
-    int GetHeight();
-    void DeleteTree();
-    void LeftRotate();
-    void RightRotate();
-    void BigLeftRotate();
-    void BigRightRotate();
-    void BalanceTree(AVLNode*&);
+    void refreshHeight(); 
+    int GetHeight(AVLNode*); 
+    void DeleteTree(AVLNode*); 
+    AVLNode* LeftRotate();
+    AVLNode* RightRotate();
+    AVLNode* BigLeftRotate();
+    AVLNode* BigRightRotate();
+    void BalanceTree(AVLNode*&,AVLNode*);
 
 
     void AddClient(Client);

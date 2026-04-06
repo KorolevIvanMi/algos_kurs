@@ -245,3 +245,21 @@ AVLNode* AVLNode::findClientByPassport(AVLNode*& root, long long client_passport
     }
     return nullptr;
 }
+
+void AVLNode::showAllClients(AVLNode* root){
+    if (root == nullptr) return;
+        
+        // Сначала обходим левое поддерево
+        showAllClients(root->Left);
+        
+        // Выводим текущего клиента
+        std::cout << "Паспорт: " << root->passport_number << std::endl;
+        std::cout << "ФИО: " << root->client.get_fio() << std::endl;
+        std::cout << "Адрес: " << root->client.get_adress() << std::endl;
+        std::cout << "Дата выдачи паспорта: " << root->client.get_passport_released_data_place() << std::endl;
+        std::cout << "Год рождения: " << root->client.get_birth_year() << std::endl;
+        std::cout << "------------------------" << std::endl;
+        
+        // Затем обходим правое поддерево
+        showAllClients(root->Right);
+}

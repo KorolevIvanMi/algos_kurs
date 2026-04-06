@@ -37,3 +37,19 @@ long long Client::get_passport_number_int(){
 
     return passport_number_int;
 }
+
+std::string Client::get_fio(){
+    return fio;
+}
+
+std::string Client::get_adress(){
+    return adress;
+}
+
+std::string Client::get_passport_released_data_place(){
+    return passport_released_data_place;
+}
+
+int Client::get_birth_year(){
+    return birth_year;
+}

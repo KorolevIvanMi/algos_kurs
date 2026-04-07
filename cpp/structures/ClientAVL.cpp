@@ -174,6 +174,7 @@ void AVLNode::BalanceTree(AVLNode*& root, AVLNode* newNode) {
     }
 }
 
+
 void AVLNode::AddClient(AVLNode*& root, Client client){
     long long client_passport_number = client.get_passport_number_int();
     AVLNode* mainTree = root;
@@ -225,7 +226,6 @@ void AVLNode::AddClient(AVLNode*& root, Client client){
         root->BalanceTree(root, mainTree);
     }
 }
-
 
 AVLNode* AVLNode::findClientByPassport(AVLNode*& root, long long client_passport){
     AVLNode* current = root;
@@ -369,7 +369,6 @@ void AVLNode::deleteClient(AVLNode*& mainTree, long long passport_to_del){
     }
 }
 
-
 std::vector<AVLNode*> AVLNode::findClientByFio(AVLNode* root, std::string searchString) {
     std::vector<AVLNode*> results;
     
@@ -391,7 +390,6 @@ std::vector<AVLNode*> AVLNode::findClientByFio(AVLNode* root, std::string search
     
     return results;
 }
-
 
 std::vector<AVLNode*> AVLNode::findClientByAdress(AVLNode* root, std::string searchString) {
     std::vector<AVLNode*> results;

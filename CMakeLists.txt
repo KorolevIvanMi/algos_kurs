@@ -5,5 +5,6 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/headers/structures)
 add_executable(Algos_kurs 
     main.cpp
     cpp/classes/Client.cpp
+    cpp/structures/ClientAVL.cpp
     )
 

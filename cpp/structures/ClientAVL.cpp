@@ -1,6 +1,7 @@
 #include <string>
 #include <iostream>
 #include "ClientAVL.h"
+#include <vector>
 
 void AVLNode::refreshHeight(){
     AVLNode* current = this;
@@ -262,4 +263,151 @@ void AVLNode::showAllClients(AVLNode* root){
         
         // Затем обходим правое поддерево
         showAllClients(root->Right);
+}
+
+void AVLNode::deleteClient(AVLNode*& mainTree, long long passport_to_del){
+
+    if (mainTree == nullptr){
+        return;
+    }
+
+    int k = 0;
+    AVLNode* elemToDell = mainTree->findClientByPassport(mainTree, passport_to_del);
+
+    if(elemToDell == nullptr){
+        return;
+    }
+
+    AVLNode* parent = elemToDell->Prev;
+    if (elemToDell->Left == nullptr && elemToDell->Right == nullptr) {
+        if (parent != nullptr) {
+            if (parent->Left == elemToDell) {
+                parent->Left = nullptr;
+            }
+            else {
+                parent->Right = nullptr;
+            }
+        }
+        else {
+            mainTree = nullptr;
+        }
+        delete elemToDell;
+    }// c этого момента исправить 
+    else if (elemToDell->Left == nullptr || elemToDell->Right == nullptr) {
+        AVLNode* child = (elemToDell->Left != nullptr) ? elemToDell->Left : elemToDell->Right;
+
+        if (parent != nullptr) {
+            if (parent->Left == elemToDell) {
+                parent->Left = child;
+            }
+            else {
+                parent->Right = child;
+            }
+        }
+        else {
+            mainTree = child;
+        }
+
+        if (child != nullptr) {
+            child->Prev = parent;
+        }
+
+        delete elemToDell;
+    }
+    else {
+        AVLNode* successor = elemToDell->Right;
+        AVLNode* successorParent = elemToDell;
+
+        while (successor->Left != nullptr) {
+            successorParent = successor;
+            successor = successor->Left;
+        }
+        AVLNode* originalParent = elemToDell->Prev;
+
+        if (successorParent != elemToDell) {
+            successorParent->Left = successor->Right;
+            if (successor->Right != nullptr) {
+                successor->Right->Prev = successorParent;
+            }
+
+            successor->Right = elemToDell->Right;
+            if (elemToDell->Right != nullptr) {
+                elemToDell->Right->Prev = successor;
+            }
+        }
+
+        successor->Left = elemToDell->Left;
+        if (elemToDell->Left != nullptr) {
+            elemToDell->Left->Prev = successor;
+        }
+
+        successor->Prev = originalParent;
+
+        if (originalParent != nullptr) {
+            if (originalParent->Left == elemToDell) {
+                originalParent->Left = successor;
+            }
+            else {
+                originalParent->Right = successor;
+            }
+        }
+        else {
+            mainTree = successor;
+        }
+
+        delete elemToDell;
+        parent = successor;
+    }
+
+    if (parent != nullptr) {
+        parent->refreshHeight();
+        parent->BalanceTree(mainTree, parent);
+    }
+    else if (mainTree != nullptr) {
+        mainTree->refreshHeight();
+        mainTree->BalanceTree(mainTree, mainTree);
+    }
+}
+
+
+std::vector<AVLNode*> AVLNode::findClientByFio(AVLNode* root, std::string searchString) {
+    std::vector<AVLNode*> results;
+    
+    if (root == nullptr) return results;
+    
+    // Левый обход
+    std::vector<AVLNode*> leftResults = findClientByFio(root->Left, searchString);
+    results.insert(results.end(), leftResults.begin(), leftResults.end());
+    
+    // Проверка текущего узла
+    std::string currentFio = root->client.get_fio();
+    if (currentFio.find(searchString) != std::string::npos) {
+        results.push_back(root);
+    }
+    
+    // Правый обход
+    std::vector<AVLNode*> rightResults = findClientByFio(root->Right, searchString);
+    results.insert(results.end(), rightResults.begin(), rightResults.end());
+    
+    return results;
+}
+
+
+std::vector<AVLNode*> AVLNode::findClientByAdress(AVLNode* root, std::string searchString) {
+    std::vector<AVLNode*> results;
+    
+    if (root == nullptr) return results;
+    
+    std::vector<AVLNode*> leftResults = findClientByAdress(root->Left, searchString);
+    results.insert(results.end(), leftResults.begin(), leftResults.end());
+    
+    std::string currentAdress = root->client.get_adress();
+    if (currentAdress.find(searchString) != std::string::npos) {
+        results.push_back(root);
+    }
+    
+    std::vector<AVLNode*> rightResults = findClientByAdress(root->Right, searchString);
+    results.insert(results.end(), rightResults.begin(), rightResults.end());
+    
+    return results;
 }

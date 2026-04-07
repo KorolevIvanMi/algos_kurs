@@ -53,3 +53,4 @@ std::string Client::get_passport_released_data_place(){
 int Client::get_birth_year(){
     return birth_year;
 }
+

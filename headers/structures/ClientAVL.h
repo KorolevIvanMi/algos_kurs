@@ -18,7 +18,7 @@ struct AVLNode
 
     void refreshHeight(); 
     int GetHeight(AVLNode*); 
-    void DeleteTree(AVLNode*); 
+    void DeleteTree(AVLNode*&); 
     AVLNode* LeftRotate();
     AVLNode* RightRotate();
     AVLNode* BigLeftRotate();

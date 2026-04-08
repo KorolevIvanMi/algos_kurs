@@ -20,11 +20,12 @@ int AVLNode::GetHeight(AVLNode* node){
     return node->height;
 }
 
-void AVLNode::DeleteTree(AVLNode* root){
+void AVLNode::DeleteTree(AVLNode*& root){
     if (root == nullptr)return;
     DeleteTree(root->Right);
     DeleteTree(root->Left);
     delete root;    
+    root = nullptr;
 }
 
 AVLNode* AVLNode::LeftRotate() {
@@ -231,7 +232,7 @@ AVLNode* AVLNode::findClientByPassport(AVLNode*& root, long long client_passport
     AVLNode* current = root;
     while(true){
         if(current->passport_number == client_passport){
-            std::cout << "Найдет человек, инфу выведу потом ";
+            
             return current;
         }
         if (current->passport_number > client_passport && current->Left){

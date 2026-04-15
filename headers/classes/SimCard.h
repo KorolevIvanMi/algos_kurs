@@ -19,4 +19,5 @@ class SimCard{
         int get_birth_age();
         bool get_isvailable();
 
+        SimCard& operator=(const SimCard& other);
 };

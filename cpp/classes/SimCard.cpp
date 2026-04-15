@@ -47,3 +47,12 @@ long long SimCard::get_number_int(){
 
     return sim_number_int;
 }
+
+SimCard& SimCard::operator=(const SimCard& other){
+    this->birth_age = other.birth_age;
+    this->isavailable = other.isavailable;
+    this->number = other.number;
+    this->tariff = other.tariff;
+
+    return *this;
+}

@@ -6,6 +6,7 @@ add_executable(Algos_kurs
     main.cpp
     cpp/classes/Client.cpp
     cpp/structures/ClientAVL.cpp
+    cpp/classes/SimCard.cpp
     cpp/structures/SimCardHash.cpp
     )
 

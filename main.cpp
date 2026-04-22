@@ -21,12 +21,29 @@ void initializeTestData(AVLNode*& root) {
     root->AddClient(root, client5);
 }
 
+void initializeTestSimCards(HashTable*& simCardBase) {
+    SimCard simcard1("111-1111111", "Эконом", 2020, true);
+    SimCard simcard2("222-2222222", "Стандарт", 2021, true);
+    SimCard simcard3("333-3333333", "Премиум", 2022, true);
+    SimCard simcard4("444-4444444", "Безлимит", 2023, true);
+    SimCard simcard5("555-5555555", "Студенческий", 2024, true);
+    
+    simCardBase->addElem(simcard1);
+    simCardBase->addElem(simcard2);
+    simCardBase->addElem(simcard3);
+    simCardBase->addElem(simcard4);
+    simCardBase->addElem(simcard5);
 
+}
 
 int main(int, char**){
     AVLNode* clientBase = nullptr;
+    HashTable* simCardBase = new HashTable();
+
+    SimCard* simCard = nullptr;
 
     initializeTestData(clientBase);
+    initializeTestSimCards(simCardBase); 
     int command = 0;
     bool exit_flag = false;
     
@@ -48,6 +65,7 @@ int main(int, char**){
         std::cout << "11. Поиск сим карты по тарифу" << std::endl;
         std::cout << "12. Регистрация выдачи сим карты клиенту" << std::endl;
         std::cout << "13. Регистрация возврата сим карты клиенту" << std::endl;
+        std::cout << "14. Просмотр всех сим карт" << std::endl;
         std::cout << "0. Выход" << std::endl;
         std::cout << "Введите номер команды: ";
         std::cin >> command;
@@ -59,6 +77,13 @@ int main(int, char**){
         int birth_year;
         std::string adress;
         long long passport_number_int;
+
+        std::string simcard_number;
+        std::string tariff;
+        int birth_age;
+
+        long long simcard_number_int;
+
 
         switch(command){
             case 0:
@@ -160,6 +185,63 @@ int main(int, char**){
                         std::cout << "------------------------" << std::endl;
                     }
                 }
+            break;
+            case 8:
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); 
+    
+                std::cout << "Введи номер сим карты (ХХХ-ХХХХХХХ): ";
+                std::getline(std::cin, simcard_number);
+                
+                std::cout << "Введи тариф: ";
+                std::getline(std::cin, tariff);
+                
+                std::cout << "Введите год выпуска: ";
+                std::cin >> birth_age;
+                
+                std::cin.ignore();
+                {
+                    SimCard new_simcard(simcard_number, tariff, birth_age, true);
+                    simCardBase->addElem(new_simcard);
+                }
+                break;
+            case 9:
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); 
+                std::cout << "Введите номер карты: ";
+                std::cin >> simcard_number_int;
+                simCardBase->deleteElemen(simcard_number_int);
+            break;
+            case 10:
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); 
+                std::cout << "Введите номер карты: ";
+                std::cin >> simcard_number_int;
+                {
+                    HashSegment* finded_sim_card = simCardBase->findSimCardByNumber(simcard_number_int);
+                    std::cout << "Номер сим карты: " << finded_sim_card->sim.get_number() << std::endl;
+                    std::cout << "Тариф карты: " << finded_sim_card->sim.get_tariff() << std::endl;
+                    std::cout << "Год выпуска: " << finded_sim_card->sim.get_birth_age() << std::endl;
+                    std::cout << "Доступность: " << finded_sim_card->sim.get_isvailable() << std::endl;
+                }
+            break;
+            case 11:
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); 
+                std::cout << "Введите тариф: ";
+                getline(std::cin, tariff);
+                {
+                    std::vector <HashSegment*> sim_cards = simCardBase->findSimCardByTariff(tariff);
+                    for(int i = 0; i < sim_cards.size(); i++){
+                        HashSegment* sim_card = sim_cards[i];
+                        std::cout << "Номер сим карты: " << sim_card->sim.get_number() << std::endl;
+                        std::cout << "Тариф карты: " << sim_card->sim.get_tariff() << std::endl;
+                        std::cout << "Год выпуска: " << sim_card->sim.get_birth_age() << std::endl;
+                        std::cout << "Доступность: " << sim_card->sim.get_isvailable() << std::endl;
+                    }
+                }
+            break;
+            case 12:
+                
+            break;
+            case 14:
+                simCardBase->showTable();
             break;
             default:
                 std::cout << "Такой команды нет"<< std::endl<< std::endl<< std::endl;

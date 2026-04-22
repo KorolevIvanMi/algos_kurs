@@ -24,7 +24,7 @@ int HashTable::doubleHash(long long key, int attempt, int size){
     }
     hash2 = abs(hash2);
     int result = (hash1 + hash2 * attempt) % size;
-    std::cout<<result;
+    // std::cout<<result;
     return result;
 }
 
@@ -36,7 +36,7 @@ void HashTable::showTable(){
                 std::cout << "[DELETED]  " << i << "  -" << std::endl;
             }
             else {
-                std::cout << hashTable[i]->number_key << "  " << hashTable[i]->hashed_key << std::endl;
+                std::cout << hashTable[i]->number_key << "  " << hashTable[i]->hashed_key <<"  "<<hashTable[i]->sim.get_tariff()<<std::endl;
             }
         }
     }
@@ -45,7 +45,7 @@ void HashTable::showTable(){
 int HashTable::countOccupiedCells(){
     int k = 0;
     for (int i = 0; i < this->start_element_count; i ++){
-        if (hashTable[i] != nullptr or hashTable[i]->isDeleted == false){
+        if (hashTable[i] != nullptr && hashTable[i]->isDeleted == false){
             k ++;
         }
     }
@@ -173,6 +173,7 @@ void HashTable::addElem(SimCard new_sim_card) {
             new_element->hashed_key = hashed_index;
             new_element->collision_count = attempt;
             this->hashTable[hashed_index] = new_element;
+            
             return; // Успешная вставка
         }
         
@@ -189,7 +190,7 @@ HashSegment* HashTable::findSimCardByNumber(long long sim_card_number){
     int size = this->start_element_count;
     for( int i = 0; i < 100; i ++){
         hashed_key = this->doubleHash(sim_card_number, i, start_element_count);
-        if(hashed_key >= 0 && hashed_key <= size){
+        if(hashed_key >= 0 && hashed_key < size){
             if (this->hashTable[hashed_key] == nullptr) {
                 return nullptr;
             }

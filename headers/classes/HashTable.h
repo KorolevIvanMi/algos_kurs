@@ -13,7 +13,7 @@ class HashTable{
 
         int doubleHash(long long , int, int); // +
         void showTable(); // +
-        void handleTableOverflow();
+        void handleTableOverflow(); //+
         int countOccupiedCells(); //+
         void deleteElemen(long long sim_card_number);
         void addElem(HashSegment new_sim_card);

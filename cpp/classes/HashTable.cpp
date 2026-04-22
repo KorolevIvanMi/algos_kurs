@@ -68,7 +68,7 @@ void HashTable::handleTableOverflow(){
             bool inserted = false;
             int attempt = 0;
             
-            while(attempt < 10 && !inserted){
+            while(attempt < 100 && !inserted){
                 long long int_number_key = old_segment->sim.get_number_int();
                 int new_index = this->doubleHash(int_number_key, attempt, new_size);
 
@@ -91,19 +91,7 @@ void HashTable::handleTableOverflow(){
             }
 
             if (!inserted){
-                for(int j = 0; j < new_size && !inserted; j++){
-                    if (newTable[j] == nullptr || newTable[j]->isDeleted) {
-                        HashSegment* new_segment = new HashSegment;
-                        new_segment->collision_count = old_segment->collision_count;
-                        new_segment->hashed_key = j;
-                        new_segment->isDeleted = false;
-                        new_segment->number_key = old_segment->number_key;
-                        new_segment->sim = old_segment->sim;
-
-                        newTable[j] = new_segment;
-                        inserted = true;
-                    }
-                }
+                std::cout<< "невозможно вставить такой элемент в таблицу" << std::endl;
             }
         }
 
@@ -119,4 +107,31 @@ void HashTable::handleTableOverflow(){
 
     this->hashTable = newTable;
 
+}
+
+void HashTable::deleteElemen(long long sim_card_number){
+    HashSegment * segment_to_delete = nullptr;
+    int delete_index = -1;
+
+    for(int attempt = 0; attempt < 100; attempt ++ ){
+        int hashed_index = this->doubleHash(sim_card_number , attempt, this->start_element_count);
+
+        if (hashed_index >= 0 && hashed_index < this->start_element_count &&
+            this->hashTable[hashed_index] != nullptr &&
+            !this->hashTable[hashed_index]->isDeleted && // Игнорируем уже удаленные
+            this->hashTable[hashed_index]->sim.get_number_int() == sim_card_number) {
+
+            segment_to_delete = this->hashTable[hashed_index];
+            delete_index = hashed_index;
+            break;
+        }
+    }
+
+    if (segment_to_delete == nullptr){
+        std::cout << "Элемент для удаления не найден" << std::endl;
+        return;
+    }else{
+        segment_to_delete->isDeleted = true;
+        std::cout << "Элемент удачно удалён !" << std::endl;
+    }
 }

@@ -135,3 +135,83 @@ void HashTable::deleteElemen(long long sim_card_number){
         std::cout << "Элемент удачно удалён !" << std::endl;
     }
 }
+
+void HashTable::addElem(SimCard new_sim_card) {
+    // Обновляем размер перед проверкой
+    int current_size = this->start_element_count; // или getTableSize()
+    int occupied_cells = this->countOccupiedCells();
+    
+    if (occupied_cells == current_size) {
+        this->handleTableOverflow();
+        current_size = this->start_element_count; // Обновляем размер
+    }
+
+    int attempt = 0;
+    HashSegment* new_element = new HashSegment;
+    new_element->sim = new_sim_card;
+    new_element->collision_count = 0;
+    new_element->isDeleted = false;
+    new_element->number_key = new_sim_card.get_number();
+
+    while (attempt < 100) {
+        int hashed_index = this->doubleHash(new_sim_card.get_number_int(), attempt, current_size);
+        
+        if (hashed_index < 0 || hashed_index >= current_size) {
+            attempt++;
+            continue;
+        }
+
+        if (this->hashTable[hashed_index] == nullptr || 
+            this->hashTable[hashed_index]->isDeleted) {
+            
+            // Очищаем удалённый элемент
+            if (this->hashTable[hashed_index] != nullptr) {
+                delete this->hashTable[hashed_index];
+                this->hashTable[hashed_index] = nullptr;
+            }
+
+            new_element->hashed_key = hashed_index;
+            new_element->collision_count = attempt;
+            this->hashTable[hashed_index] = new_element;
+            return; // Успешная вставка
+        }
+        
+        attempt++;
+    }
+    
+    // Если дошли сюда - вставка не удалась
+    delete new_element; 
+}
+
+
+HashSegment* HashTable::findSimCardByNumber(long long sim_card_number){
+    int hashed_key = 0;
+    int size = this->start_element_count;
+    for( int i = 0; i < 100; i ++){
+        hashed_key = this->doubleHash(sim_card_number, i, start_element_count);
+        if(hashed_key >= 0 && hashed_key <= size){
+            if (this->hashTable[hashed_key] == nullptr) {
+                return nullptr;
+            }
+            if (!this->hashTable[hashed_key]->isDeleted && this->hashTable[hashed_key]->sim.get_number_int() == sim_card_number) {
+                    return this->hashTable[hashed_key];
+            }
+        }
+    }
+    return nullptr;
+}
+
+std::vector<HashSegment*> HashTable::findSimCardByTariff(std::string sim_card_tariff){
+    std::vector <HashSegment*> results;
+    int size = this->start_element_count;
+
+    for(int i = 0; i < size; i ++){
+        if(this->hashTable[i] != nullptr && this->hashTable[i]->isDeleted != true){
+            if(this->hashTable[i]->sim.get_tariff() == sim_card_tariff){
+            results.push_back(this->hashTable[i]);
+            }
+        }
+    }
+
+    return results;
+}

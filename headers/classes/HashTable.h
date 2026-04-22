@@ -3,6 +3,8 @@
 #include <string>
 #include <SimCard.h>
 #include <SimCardHash.h>
+#include <vector>
+
 
 class HashTable{
     private:
@@ -15,8 +17,8 @@ class HashTable{
         void showTable(); // +
         void handleTableOverflow(); //+
         int countOccupiedCells(); //+
-        void deleteElemen(long long sim_card_number);
-        void addElem(HashSegment new_sim_card);
-        HashSegment* findSimCardByNumber(long long sim_card_number);
-        HashSegment* findSimCardByTariff(std::string sim_card_tariff);
+        void deleteElemen(long long sim_card_number); //+
+        void addElem(SimCard new_sim_card); // +
+        HashSegment* findSimCardByNumber(long long sim_card_number); //+
+        std::vector<HashSegment*> findSimCardByTariff(std::string sim_card_tariff);
 };

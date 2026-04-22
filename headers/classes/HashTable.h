@@ -11,10 +11,10 @@ class HashTable{
     public:
         HashTable();
 
-        int doubleHash(std::string, int, int);
-        void showTable();
+        int doubleHash(long long , int, int); // +
+        void showTable(); // +
         void handleTableOverflow();
-        int countOccupiedCells();
+        int countOccupiedCells(); //+
         void deleteElemen(long long sim_card_number);
         void addElem(HashSegment new_sim_card);
         HashSegment* findSimCardByNumber(long long sim_card_number);

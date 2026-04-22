@@ -1,6 +1,7 @@
 #include <iostream>
 #include "ClientAVL.h"
 #include "Client.h"
+#include "HashTable.h"
 #include <cstdlib>
 #include <limits>
 #include <cmath>
@@ -29,6 +30,8 @@ int main(int, char**){
     int command = 0;
     bool exit_flag = false;
     
+
+
     do{
         // system("clear");
         std::cout << "\n========== Обслужаивание клиентов оператора сотовой связи ==========" << std::endl;

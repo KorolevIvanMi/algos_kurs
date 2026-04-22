@@ -8,6 +8,7 @@ HashSegment::HashSegment(){
     this->isDeleted = false;
     SimCard my_sim;
     this->sim = my_sim;
+    this->collision_count = 0;
 }
 
 HashSegment::HashSegment(std::string number_key, int hashed_key, SimCard sim, bool isDeleted){
@@ -15,4 +16,5 @@ HashSegment::HashSegment(std::string number_key, int hashed_key, SimCard sim, bo
     this->hashed_key = hashed_key;
     this->sim = sim;
     this->isDeleted = isDeleted;
+    this->collision_count = 0;
 }

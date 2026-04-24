@@ -2,6 +2,7 @@
 #include "ClientAVL.h"
 #include "Client.h"
 #include "HashTable.h"
+#include "List.h"
 #include <cstdlib>
 #include <limits>
 #include <cmath>
@@ -39,14 +40,15 @@ void initializeTestSimCards(HashTable*& simCardBase) {
 int main(int, char**){
     AVLNode* clientBase = nullptr;
     HashTable* simCardBase = new HashTable();
-
+    List* in_out_base = nullptr;
     SimCard* simCard = nullptr;
 
     initializeTestData(clientBase);
     initializeTestSimCards(simCardBase); 
     int command = 0;
     bool exit_flag = false;
-    
+    std::string data_of_out = "";
+    std::string data_of_end = "";
 
 
     do{
@@ -66,6 +68,7 @@ int main(int, char**){
         std::cout << "12. Регистрация выдачи сим карты клиенту" << std::endl;
         std::cout << "13. Регистрация возврата сим карты клиенту" << std::endl;
         std::cout << "14. Просмотр всех сим карт" << std::endl;
+        std::cout << "15. Просмотр всеx занятых симкарт и клиентов" << std::endl;
         std::cout << "0. Выход" << std::endl;
         std::cout << "Введите номер команды: ";
         std::cin >> command;
@@ -238,10 +241,47 @@ int main(int, char**){
                 }
             break;
             case 12:
-                
+	        
+    	        std::cout << "Введите номер паспорта клиента: ";
+    	        std::cin >> passport_number_int;
+                std::cout << "Введите номер сим карты: ";
+                std::cin >> simcard_number_int;
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                std::cout << "Введите дату выдачи: ";
+                std::getline(std::cin,data_of_out);
+
+                {
+                    AVLNode* client_node = clientBase->findClientByPassport(clientBase, passport_number_int);
+                    Client client = client_node->client;
+                    HashSegment* finded_sim_card = simCardBase->findSimCardByNumber(simcard_number_int);
+                    List* new_operation = new List;
+                    new_operation->passport_number = client.get_passport_number_int();
+                    new_operation->simcard_number = finded_sim_card->sim.get_number_int();
+                    new_operation->data_of_outcome = data_of_out;
+                    new_operation->data_of_end = "";
+                    finded_sim_card->sim.set_isavailable(false); 
+                    in_out_base->AddSimCard(in_out_base, new_operation);
+
+                }
+            break;
+            case 13:
+                std::cout << "Введите номер паспорта клиента: ";
+                std::cin >> passport_number_int;
+                std::cout << "Введите номер сим карты, которую хотите снять с использования: ";
+                std::cin >> simcard_number_int;
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                std::getline(std::cin, data_of_end);
+                {
+                    simcard_number_int = in_out_base->DeleteCard(in_out_base, passport_number_int, data_of_end);
+                    HashSegment* finded_sim_card = simCardBase->findSimCardByNumber(simcard_number_int);
+                    finded_sim_card->sim.set_isavailable(true);
+                }
             break;
             case 14:
                 simCardBase->showTable();
+            break;
+            case 15:
+                in_out_base->showList(in_out_base);
             break;
             default:
                 std::cout << "Такой команды нет"<< std::endl<< std::endl<< std::endl;

@@ -36,7 +36,7 @@ void HashTable::showTable(){
                 std::cout << "[DELETED]  " << i << "  -" << std::endl;
             }
             else {
-                std::cout << hashTable[i]->number_key << "  " << hashTable[i]->hashed_key <<"  "<<hashTable[i]->sim.get_tariff()<<std::endl;
+                std::cout << hashTable[i]->number_key << "  " << hashTable[i]->hashed_key <<"  "<<hashTable[i]->sim.get_tariff()<<"  " <<hashTable[i]->sim.get_isvailable() <<std::endl;
             }
         }
     }

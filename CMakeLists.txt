@@ -9,5 +9,6 @@ add_executable(Algos_kurs
     cpp/classes/SimCard.cpp
     cpp/structures/SimCardHash.cpp
     cpp/classes/HashTable.cpp
+    cpp/structures/List.cpp
     )
 

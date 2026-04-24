@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 #include "SimCard.h"
 #include "Client.h"
@@ -12,11 +13,13 @@ struct List{
     std::string data_of_end;
 
 
+
     List* prev;
     List* next;
 
-    void AddSimCard();
-    void DeleteCard();
-    void SortCards();
+    void AddSimCard(List*& head, List* new_operation);
+    long long DeleteCard(List*& head, long long passport_number, std::string data);
+    void SortCards(List*&);
+    void showList(List* head);
     
 };

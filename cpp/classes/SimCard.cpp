@@ -56,3 +56,8 @@ SimCard& SimCard::operator=(const SimCard& other){
 
     return *this;
 }
+
+void SimCard::set_isavailable(bool state){
+    this->isavailable = state;
+
+}

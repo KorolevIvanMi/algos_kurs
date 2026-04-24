@@ -18,6 +18,7 @@ class SimCard{
         std::string get_tariff();
         int get_birth_age();
         bool get_isvailable();
+        void set_isavailable(bool);
 
         SimCard& operator=(const SimCard& other);
 };

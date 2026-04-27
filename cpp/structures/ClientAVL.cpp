@@ -438,3 +438,37 @@ std::vector<AVLNode*> AVLNode::findClientByAdress(AVLNode* root, std::string sea
 
     return results;
 }
+
+
+void AVLNode::showAllClients2(AVLNode* root, int level) {
+    if (root == nullptr) return;
+    
+    // Выводим отступы для визуализации уровня
+    for (int i = 0; i < level; i++) {
+        std::cout << "  ";
+    }
+    
+    // Выводим текущий узел (номер паспорта)
+    std::cout << "├─ Паспорт: " << root->passport_number;
+    
+    // Выводим информацию о детях
+    std::cout << " [";
+    if (root->Left != nullptr) {
+        std::cout << "Левый: " << root->Left->passport_number;
+    } else {
+        std::cout << "Левый: нет";
+    }
+    
+    std::cout << " | ";
+    
+    if (root->Right != nullptr) {
+        std::cout << "Правый: " << root->Right->passport_number;
+    } else {
+        std::cout << "Правый: нет";
+    }
+    std::cout << "]" << std::endl;
+    
+    // Рекурсивно обходим поддеревья с увеличением уровня
+    showAllClients2(root->Left, level + 1);
+    showAllClients2(root->Right, level + 1);
+}

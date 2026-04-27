@@ -32,4 +32,5 @@ struct AVLNode
     AVLNode* findClientByPassport(AVLNode*&, long long); //+
     std::vector<AVLNode*> findClientByFio(AVLNode*, std::string);
     std::vector<AVLNode*> findClientByAdress(AVLNode*,std::string);
+    void showAllClients2(AVLNode* root, int level = 0);
 };

@@ -17,12 +17,12 @@ int HashTable::doubleHash(long long key, int attempt, int size){
     for(int i = 0; i < key_string.length() ; i ++){
         hash1 += key_string[i];
     }
-    hash1 = (hash1 - 490) * 9;
+    hash1 = ((hash1 - 490) * 9)% size;
     int hash2 = 0;
     for(int i = 0; i < key_string.length(); i ++){
         hash2 = 31*hash2 + key_string[i];
     }
-    hash2 = abs(hash2);
+    hash2 = abs(hash2) % (size - 1) + 1; 
     int result = (hash1 + hash2 * attempt) % size;
     // std::cout<<result;
     return result;
@@ -36,7 +36,7 @@ void HashTable::showTable(){
                 std::cout << "[DELETED]  " << i << "  -" << std::endl;
             }
             else {
-                std::cout << hashTable[i]->number_key << "  " << hashTable[i]->hashed_key <<"  "<<hashTable[i]->sim.get_tariff()<<"  " <<hashTable[i]->sim.get_isvailable() <<std::endl;
+                std::cout <<" Номер: "<< hashTable[i]->number_key <<" Индекс: " << hashTable[i]->hashed_key <<" Тариф: "<<hashTable[i]->sim.get_tariff()<<" Доступность: " <<hashTable[i]->sim.get_isvailable() <<" Число колизий: "<< hashTable[i]->collision_count<<std::endl;
             }
         }
     }
@@ -179,7 +179,6 @@ void HashTable::addElem(SimCard new_sim_card) {
         
         attempt++;
     }
-    
     // Если дошли сюда - вставка не удалась
     delete new_element; 
 }

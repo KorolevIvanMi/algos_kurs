@@ -8,8 +8,8 @@
 
 class HashTable{
     private:
-        HashSegment** hashTable = new HashSegment* [100];
-        int start_element_count = 100;
+        HashSegment** hashTable = new HashSegment* [5];
+        int start_element_count = 5;
     public:
         HashTable();
 

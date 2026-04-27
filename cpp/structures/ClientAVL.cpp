@@ -293,7 +293,7 @@ void AVLNode::deleteClient(AVLNode*& mainTree, long long passport_to_del){
             mainTree = nullptr;
         }
         delete elemToDell;
-    }// c этого момента исправить 
+    } 
     else if (elemToDell->Left == nullptr || elemToDell->Right == nullptr) {
         AVLNode* child = (elemToDell->Left != nullptr) ? elemToDell->Left : elemToDell->Right;
 
@@ -379,9 +379,22 @@ std::vector<AVLNode*> AVLNode::findClientByFio(AVLNode* root, std::string search
     std::vector<AVLNode*> leftResults = findClientByFio(root->Left, searchString);
     results.insert(results.end(), leftResults.begin(), leftResults.end());
     
-    // Проверка текущего узла
+    // Проверка текущего узла прямым поиском
     std::string currentFio = root->client.get_fio();
-    if (currentFio.find(searchString) != std::string::npos) {
+    
+    // Алгоритм прямого поиска подстроки
+    bool found = false;
+    for (int i = 0; i <= (int)currentFio.length() - (int)searchString.length() && !found; i++) {
+        int j = 0;
+        while (j < searchString.length() && currentFio[i + j] == searchString[j]) {
+            j++;
+        }
+        if (j == searchString.length()) {
+            found = true;
+        }
+    }
+    
+    if (found) {
         results.push_back(root);
     }
     
@@ -391,22 +404,37 @@ std::vector<AVLNode*> AVLNode::findClientByFio(AVLNode* root, std::string search
     
     return results;
 }
-
 std::vector<AVLNode*> AVLNode::findClientByAdress(AVLNode* root, std::string searchString) {
     std::vector<AVLNode*> results;
-    
+
     if (root == nullptr) return results;
-    
+
+    // Обходим левое поддерево
     std::vector<AVLNode*> leftResults = findClientByAdress(root->Left, searchString);
     results.insert(results.end(), leftResults.begin(), leftResults.end());
-    
+
+    // Прямой поиск в тексте текущего узла
     std::string currentAdress = root->client.get_adress();
-    if (currentAdress.find(searchString) != std::string::npos) {
+
+    // Алгоритм прямого поиска подстроки
+    bool found = false;
+    for (int i = 0; i <= (int)currentAdress.length() - (int)searchString.length() && !found; i++) {
+        int j = 0;
+        while (j < searchString.length() && currentAdress[i + j] == searchString[j]) {
+            j++;
+        }
+        if (j == searchString.length()) {
+            found = true;
+        }
+    }
+
+    if (found) {
         results.push_back(root);
     }
-    
+
+    // Обходим правое поддерево
     std::vector<AVLNode*> rightResults = findClientByAdress(root->Right, searchString);
     results.insert(results.end(), rightResults.begin(), rightResults.end());
-    
+
     return results;
 }

@@ -29,7 +29,6 @@ struct AVLNode
     void AddClient(AVLNode*&, Client); //+
     void deleteClient(AVLNode*&, long long);
     void showAllClients(AVLNode*); //+
-    // void deleteAllClients(AVLNode*&); по сути равно удалению дерева
     AVLNode* findClientByPassport(AVLNode*&, long long); //+
     std::vector<AVLNode*> findClientByFio(AVLNode*, std::string);
     std::vector<AVLNode*> findClientByAdress(AVLNode*,std::string);

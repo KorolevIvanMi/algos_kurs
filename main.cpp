@@ -7,6 +7,8 @@
 #include <limits>
 #include <cmath>
 #include <vector>
+#include "Validator.h"
+
 
 void initializeTestData(AVLNode*& root) {
     Client client1("12 34 567890", "ОВД Ленинского района г. Москвы", "Иванов Иван Иванович", 1985, "г. Москва, ул. Ленина, д. 1, кв. 10");
@@ -42,6 +44,7 @@ int main(int, char**){
     HashTable* simCardBase = new HashTable();
     List* in_out_base = nullptr;
     SimCard* simCard = nullptr;
+    Validator validator;
 
     initializeTestData(clientBase);
     initializeTestSimCards(simCardBase); 
@@ -49,7 +52,7 @@ int main(int, char**){
     bool exit_flag = false;
     std::string data_of_out = "";
     std::string data_of_end = "";
-
+    std::string available_tariff[] = {"Эконом", "Стандарт","Премиум","Безлимит","Студенческий"}; 
 
     do{
         // system("clear");
@@ -90,13 +93,14 @@ int main(int, char**){
 
         switch(command){
             case 0:
+                clientBase->DeleteTree(clientBase);
                 exit_flag = true;
                 break;
             case 1:
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                std::cout << "Введите номер паспорта: ";
-                std::getline(std::cin, passport_number);
-
+                passport_number = validator.validatePassportNumber();
+                
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 std::cout << "Введите дату и место выдачи паспорта: ";
                 std::getline(std::cin, passport_released_data_place);
 
@@ -111,13 +115,20 @@ int main(int, char**){
                 std::getline(std::cin, adress);
                 {
                     Client new_client(passport_number, passport_released_data_place, fio, birth_year, adress);
-                    clientBase->AddClient(clientBase, new_client);
+                    passport_number_int = new_client.get_passport_number_int();
+                    AVLNode* finded_node = clientBase->findClientByPassport(clientBase, passport_number_int);
+                    if(finded_node == nullptr){
+
+                        clientBase->AddClient(clientBase, new_client);
+
+                    }else{
+                        std::cout << "Такой человек уже существует"<< std::endl;
+                    }
                 }
             break;
             case 2:
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                std::cout << "Введите номер паспорта: ";
-                std::cin>> passport_number_int;
+                passport_number_int = validator.validatePassportNumberInt();
                 clientBase->deleteClient(clientBase, passport_number_int);
 
             break;
@@ -132,8 +143,7 @@ int main(int, char**){
             break;
             case 5:
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                std::cout << "Введите номер паспорта: ";
-                std::cin>> passport_number_int;
+                passport_number_int = validator.validatePassportNumberInt();;
                 {
                     AVLNode* client_node = clientBase->findClientByPassport(clientBase, passport_number_int);
                     Client finded_client = client_node->client;
@@ -143,10 +153,12 @@ int main(int, char**){
                     std::cout << "Адрес: " << finded_client.get_adress() << std::endl;
                     std::cout << "Дата выдачи паспорта: " << finded_client.get_passport_released_data_place() << std::endl;
                     std::cout << "Год рождения: " << finded_client.get_birth_year() << std::endl;
-                    std::cout << "Добавить вывод по сим картам"<< std::endl;
-                    std::cout << "------------------------" << std::endl;
+                    std::cout << "Сим карты клиента:"<< std::endl;
+                    std::vector<long long> simcards_numbers = in_out_base->findCardsByPassportNumber(in_out_base,passport_number_int);
+                    for(long long n: simcards_numbers){
+                        std::cout << std::endl << "Номер:" << n;
+                    }
                 }
-                clientBase->findClientByPassport(clientBase, passport_number_int);
             break;
             case 6:
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -192,31 +204,52 @@ int main(int, char**){
             case 8:
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); 
     
-                std::cout << "Введи номер сим карты (ХХХ-ХХХХХХХ): ";
-                std::getline(std::cin, simcard_number);
+                simcard_number = validator.validateSimCardNumber();
+
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); 
+
+                {
+                bool flag1 = false;
+                do{
+                    std::cout << "Введите тариф: ";
+                    std::getline(std::cin, tariff);
+
+                    for(int i = 0; i < 4; i ++){
+                        if(tariff == available_tariff[i]){
+                            flag1 = true;
+                        }
+                    }
                 
-                std::cout << "Введи тариф: ";
-                std::getline(std::cin, tariff);
-                
+                }while(!flag1);
                 std::cout << "Введите год выпуска: ";
                 std::cin >> birth_age;
                 
                 std::cin.ignore();
-                {
+                { 
+                     
                     SimCard new_simcard(simcard_number, tariff, birth_age, true);
-                    simCardBase->addElem(new_simcard);
-                }
+                    simcard_number_int = new_simcard.get_number_int();
+                    HashSegment* if_finded = simCardBase->findSimCardByNumber(simcard_number_int);
+
+                    if(if_finded == nullptr){
+                        simCardBase->addElem(new_simcard);
+                    }
+                    else{
+                        std::cout << "Карта с таким номером уже существует !!"<<std::endl;
+                    }
+                
+                }}
                 break;
             case 9:
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); 
-                std::cout << "Введите номер карты: ";
-                std::cin >> simcard_number_int;
+                    
+                simcard_number_int = validator.validateSimCardNumberInt();
                 simCardBase->deleteElemen(simcard_number_int);
             break;
             case 10:
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); 
                 std::cout << "Введите номер карты: ";
-                std::cin >> simcard_number_int;
+                simcard_number_int = validator.validateSimCardNumberInt();
                 {
                     HashSegment* finded_sim_card = simCardBase->findSimCardByNumber(simcard_number_int);
                     std::cout << "Номер сим карты: " << finded_sim_card->sim.get_number() << std::endl;
@@ -241,35 +274,54 @@ int main(int, char**){
                 }
             break;
             case 12:
-	        
-    	        std::cout << "Введите номер паспорта клиента: ";
-    	        std::cin >> passport_number_int;
-                std::cout << "Введите номер сим карты: ";
-                std::cin >> simcard_number_int;
+	           
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); 
+    	        passport_number_int = validator.validatePassportNumberInt();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); 
+                simcard_number_int = validator.validateSimCardNumberInt();
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 std::cout << "Введите дату выдачи: ";
                 std::getline(std::cin,data_of_out);
 
                 {
                     AVLNode* client_node = clientBase->findClientByPassport(clientBase, passport_number_int);
-                    Client client = client_node->client;
-                    HashSegment* finded_sim_card = simCardBase->findSimCardByNumber(simcard_number_int);
-                    List* new_operation = new List;
-                    new_operation->passport_number = client.get_passport_number_int();
-                    new_operation->simcard_number = finded_sim_card->sim.get_number_int();
-                    new_operation->data_of_outcome = data_of_out;
-                    new_operation->data_of_end = "";
-                    finded_sim_card->sim.set_isavailable(false); 
-                    in_out_base->AddSimCard(in_out_base, new_operation);
+                    if(client_node == nullptr){
+                        std::cout << "Такого человека не существует!" << std::endl;
+                    }
+                    else{
+                        Client client = client_node->client;
+                        HashSegment* finded_sim_card = simCardBase->findSimCardByNumber(simcard_number_int);
+                        if(finded_sim_card == nullptr){
+                            std::cout<<"Такой сим карты нет!"<<std::endl;
+                        }
+                        else{
+                            if(finded_sim_card->sim.get_isvailable() == false){
+                                std::cout << "Эта сим карта уже назначена другому человеку!" << std::endl;
+                            }
+                            else{
 
+                                List* new_operation = new List;
+                                new_operation->passport_number = client.get_passport_number_int();
+                                new_operation->simcard_number = finded_sim_card->sim.get_number_int();
+                                new_operation->data_of_outcome = data_of_out;
+                                new_operation->data_of_end = "";
+                                finded_sim_card->sim.set_isavailable(false); 
+                                in_out_base->AddSimCard(in_out_base, new_operation);
+                                in_out_base->SortCards(in_out_base);
+                            }
+                        }
+                    }
                 }
             break;
             case 13:
-                std::cout << "Введите номер паспорта клиента: ";
-                std::cin >> passport_number_int;
-                std::cout << "Введите номер сим карты, которую хотите снять с использования: ";
-                std::cin >> simcard_number_int;
+                
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                passport_number_int = validator.validatePassportNumberInt();
+               
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                simcard_number_int = validator.validateSimCardNumberInt();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                std::cout <<"Введите дату снятия с обслуживания" ;
                 std::getline(std::cin, data_of_end);
                 {
                     simcard_number_int = in_out_base->DeleteCard(in_out_base, passport_number_int, data_of_end);

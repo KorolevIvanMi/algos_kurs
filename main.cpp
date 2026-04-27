@@ -94,6 +94,8 @@ int main(int, char**){
         switch(command){
             case 0:
                 clientBase->DeleteTree(clientBase);
+                simCardBase->DeleteHashTable();
+                delete in_out_base;
                 exit_flag = true;
                 break;
             case 1:

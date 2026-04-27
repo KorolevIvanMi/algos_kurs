@@ -98,3 +98,4 @@ std::vector<long long> List::findCardsByPassportNumber(List* head, long long pas
 
     return result;
 }
+

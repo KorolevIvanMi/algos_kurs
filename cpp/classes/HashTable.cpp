@@ -215,3 +215,12 @@ std::vector<HashSegment*> HashTable::findSimCardByTariff(std::string sim_card_ta
 
     return results;
 }
+
+void HashTable::DeleteHashTable(){
+    for(int i = 0; i < this->start_element_count; i ++){
+        delete this->hashTable[i];
+    }
+    delete [] this->hashTable;
+
+    delete this;
+}

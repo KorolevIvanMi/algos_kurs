@@ -21,5 +21,6 @@ struct List{
     long long DeleteCard(List*& head, long long passport_number, std::string data);
     void SortCards(List*&);
     void showList(List* head);
-    std::vector <long long> findCardsByPassportNumber(List* head, long long passport_number);    
+    std::vector <long long> findCardsByPassportNumber(List* head, long long passport_number); 
+
 };

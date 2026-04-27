@@ -21,4 +21,5 @@ class HashTable{
         void addElem(SimCard new_sim_card); // +
         HashSegment* findSimCardByNumber(long long sim_card_number); //+
         std::vector<HashSegment*> findSimCardByTariff(std::string sim_card_tariff);
+        void DeleteHashTable();
 };

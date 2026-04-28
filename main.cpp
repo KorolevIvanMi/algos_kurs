@@ -11,11 +11,11 @@
 
 
 void initializeTestData(AVLNode*& root) {
-    Client client1("12 34 567890", "15.04.2002 ОВД Ленинского района г. Москвы", "Иванов Иван Иванович", 1985, "г. Москва, ул. Ленина, д. 1, кв. 10");
-    Client client2("23 45 678901", "21.07.1999 УФМС Центрального района", "Петров Петр Петрович", 1990, "г. Санкт-Петербург, Невский пр., д. 20, кв. 5");
-    Client client3("34 56 789012", "31.12.1999 Отдел УФМС по Кировской области", "Сидорова Анна Сергеевна", 1988, "г. Киров, ул. Свободы, д. 15, кв. 42");
-    Client client4("45 67 890123", "01.01.2000 МВД по Республике Татарстан", "Кузнецов Алексей Николаевич", 1975, "г. Казань, ул. Баумана, д. 7, кв. 12");
-    Client client5("56 78 901234", "04.09.2001 УФМС по Свердловской области", "Смирнова Елена Викторовна", 1995, "г. Екатеринбург, ул. Мира, д. 33, кв. 78");
+    Client client1("1234-567890", "15.04.2002 ОВД Ленинского района г. Москвы", "Смирнов Иван Иванович", 1985, "г. Москва, ул. Ленина, д. 1, кв. 10");
+    Client client2("2345-678901", "21.07.1999 УФМС Центрального района", "Петров Петр Петрович", 1990, "г. Санкт-Петербург, Невский пр., д. 20, кв. 5");
+    Client client3("3456-789012", "31.12.1999 Отдел УФМС по Кировской области", "Сидорова Анна Сергеевна", 1988, "г. Киров, ул. Свободы, д. 15, кв. 42");
+    Client client4("4567-890123", "01.01.2000 МВД по Республике Татарстан", "Кузнецов Алексей Николаевич", 1975, "г. Казань, ул. Баумана, д. 7, кв. 12");
+    Client client5("5678-901234", "04.09.2001 УФМС по Свердловской области", "Смирнова Анна Викторовна", 1995, "г. Екатеринбург, ул. Мира, д. 33, кв. 78");
     
     root->AddClient(root, client1);
     root->AddClient(root, client2);
@@ -123,6 +123,7 @@ int main(int, char**){
                     if(finded_node == nullptr){
 
                         clientBase->AddClient(clientBase, new_client);
+                        std::cout << "Пользователь успешно добавлен !" << std::endl;
 
                     }else{
                         std::cout << "Такой человек уже существует"<< std::endl;
@@ -149,17 +150,24 @@ int main(int, char**){
                 passport_number_int = validator.validatePassportNumberInt();;
                 {
                     AVLNode* client_node = clientBase->findClientByPassport(clientBase, passport_number_int);
-                    Client finded_client = client_node->client;
+                    if(client_node != nullptr){
 
-                    std::cout << "Паспорт: " << passport_number_int << std::endl;
-                    std::cout << "ФИО: " << finded_client.get_fio() << std::endl;
-                    std::cout << "Адрес: " << finded_client.get_adress() << std::endl;
-                    std::cout << "Дата выдачи паспорта: " << finded_client.get_passport_released_data_place() << std::endl;
-                    std::cout << "Год рождения: " << finded_client.get_birth_year() << std::endl;
-                    std::cout << "Сим карты клиента:"<< std::endl;
-                    std::vector<long long> simcards_numbers = in_out_base->findCardsByPassportNumber(in_out_base,passport_number_int);
-                    for(long long n: simcards_numbers){
-                        std::cout << std::endl << "Номер:" << n;
+                    
+                        Client finded_client = client_node->client;
+                        std::cout << "Паспорт: " << passport_number_int << std::endl;
+                        std::cout << "ФИО: " << finded_client.get_fio() << std::endl;
+                        std::cout << "Адрес: " << finded_client.get_adress() << std::endl;
+                        std::cout << "Дата выдачи паспорта: " << finded_client.get_passport_released_data_place() << std::endl;
+                        std::cout << "Год рождения: " << finded_client.get_birth_year() << std::endl;
+                        std::cout << "Сим карты клиента:"<< std::endl;
+                        std::vector<long long> simcards_numbers = in_out_base->findCardsByPassportNumber(in_out_base,passport_number_int);
+                        for(long long n: simcards_numbers){
+                            std::cout << std::endl << "Номер:" << n;
+                        }
+
+                    }
+                    else{
+                        std::cout << "Такого человека нет !";
                     }
                 }
             break;
@@ -178,8 +186,9 @@ int main(int, char**){
                         std::cout << "Адрес: " << finded_client.get_adress() << std::endl;
                         std::cout << "Дата выдачи паспорта: " << finded_client.get_passport_released_data_place() << std::endl;
                         std::cout << "Год рождения: " << finded_client.get_birth_year() << std::endl;
-                        std::cout << "Добавить вывод по сим картам"<< std::endl;
-                        std::cout << "------------------------" << std::endl;
+                    }
+                    if (vec.size() == 0){
+                        std::cout << "Клиентов с таким ФИО нет" << std::endl;
                     }
                 }
                 
@@ -199,8 +208,6 @@ int main(int, char**){
                         std::cout << "Адрес: " << finded_client.get_adress() << std::endl;
                         std::cout << "Дата выдачи паспорта: " << finded_client.get_passport_released_data_place() << std::endl;
                         std::cout << "Год рождения: " << finded_client.get_birth_year() << std::endl;
-                        std::cout << "Добавить вывод по сим картам"<< std::endl;
-                        std::cout << "------------------------" << std::endl;
                     }
                 }
             break;
@@ -247,18 +254,24 @@ int main(int, char**){
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); 
                     
                 simcard_number_int = validator.validateSimCardNumberInt();
+                
                 simCardBase->deleteElemen(simcard_number_int);
             break;
             case 10:
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); 
-                std::cout << "Введите номер карты: ";
                 simcard_number_int = validator.validateSimCardNumberInt();
                 {
                     HashSegment* finded_sim_card = simCardBase->findSimCardByNumber(simcard_number_int);
-                    std::cout << "Номер сим карты: " << finded_sim_card->sim.get_number() << std::endl;
-                    std::cout << "Тариф карты: " << finded_sim_card->sim.get_tariff() << std::endl;
-                    std::cout << "Год выпуска: " << finded_sim_card->sim.get_birth_age() << std::endl;
-                    std::cout << "Доступность: " << finded_sim_card->sim.get_isvailable() << std::endl;
+                    if (finded_sim_card != nullptr){
+                        std::cout << "Номер сим карты: " << finded_sim_card->sim.get_number() << std::endl;
+                        std::cout << "Тариф карты: " << finded_sim_card->sim.get_tariff() << std::endl;
+                        std::cout << "Год выпуска: " << finded_sim_card->sim.get_birth_age() << std::endl;
+                        std::cout << "Доступность: " << finded_sim_card->sim.get_isvailable() << std::endl;
+                    }
+                    else{
+                        std::cout << "Такой сим карты нет !" << std::endl;
+                    }
+                    
                 }
             break;
             case 11:
@@ -320,16 +333,21 @@ int main(int, char**){
                 
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 passport_number_int = validator.validatePassportNumberInt();
-               
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 simcard_number_int = validator.validateSimCardNumberInt();
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                std::cout <<"Введите дату снятия с обслуживания" ;
+                std::cout <<"Введите дату снятия с обслуживания: " ;
                 std::getline(std::cin, data_of_end);
                 {
-                    simcard_number_int = in_out_base->DeleteCard(in_out_base, passport_number_int, data_of_end);
+                    simcard_number_int = in_out_base->DeleteCard(in_out_base, passport_number_int, simcard_number_int,  data_of_end);
                     HashSegment* finded_sim_card = simCardBase->findSimCardByNumber(simcard_number_int);
-                    finded_sim_card->sim.set_isavailable(true);
+                    if(finded_sim_card != nullptr){
+                        finded_sim_card->sim.set_isavailable(true);
+                    }
+                    else{
+                        std::cout << "такой карты нет !";
+                    }
+                    
                 }
             break;
             case 14:

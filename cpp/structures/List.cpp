@@ -19,12 +19,12 @@ void List::AddSimCard(List*& head, List* new_operation){
     
 }
 
-long long List::DeleteCard(List*& head, long long passport_number, std::string data){
+long long List::DeleteCard(List*& head, long long passport_number, long long sim_card_number, std::string data){
     long long passport_number_head = head->passport_number;
     
     List* current = head;
     do{
-        if (current->passport_number == passport_number){
+        if (current->passport_number == passport_number && current->simcard_number == sim_card_number){
 			current->data_of_end = data;
 			return current->simcard_number;
 		}

@@ -276,6 +276,7 @@ void AVLNode::deleteClient(AVLNode*& mainTree, long long passport_to_del){
     AVLNode* elemToDell = mainTree->findClientByPassport(mainTree, passport_to_del);
 
     if(elemToDell == nullptr){
+        std::cout << "Такого пользователя нет!";
         return;
     }
 
